@@ -39,7 +39,9 @@ const allOptions = [
   'audio',
   'enumerateDevices',
 ];
-// ie support
+/**
+ * ie support
+ */
 window.requestIdleCallback = window.requestIdleCallback
   || function (cb) {
     const start = Date.now();
@@ -54,6 +56,7 @@ window.requestIdleCallback = window.requestIdleCallback
   };
 
 /**
+ * 전달받은 activeOptions[]를 기반으로 exclude할 option wrapper를 만들어낸다.
  *
  * @param activeOptions
  * @returns {Promise<any>}
@@ -68,6 +71,8 @@ function getMaterialOfFingerprintWithOptions({ activeOptions = [] }) {
 }
 
 /**
+ * brower fingerprint를 만들기 전 재료들을 모아 base64로 encoding하여 전달 한다.
+ * 기존 fingerprintjs는 클라이언트에서 만들어내서 이 부분을 서버에서 하고자 할때 사용한다.
  *
  * @param activeOptions
  * @returns {PromiseLike<string>} encoded string of stringified json to base64.
@@ -84,10 +89,6 @@ function getFingerprintWithBToA({ activeOptions = [] }) {
     .then((r) => window.btoa(JSON.stringify(r)));
 }
 
-/**
- *
- * @type {function({activeOptions?: *}): PromiseLike<string>}
- */
 const getFingerprint = getFingerprintWithBToA;
 const activeOptions = ['userAgent', 'screenResolution', 'timezone'];
 
