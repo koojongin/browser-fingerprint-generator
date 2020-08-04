@@ -11,16 +11,46 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.js"></script>
   <script src="fingerprint-generator.js"></script>
   <script>
-    const activeOptions = ['userAgent', 'screenResolution', 'timezone'];
     window.requestIdleCallback(async () => {
+      const activeOptions = ['userAgent', 'screenResolution', 'timezone'];
       const fingerprint = await FingerPrintGenerator.getFingerprint({ activeOptions });
-      document.querySelector('body').innerHTML = `your fingerprint is ${fingerprint}.`;
-
       const ta = `<textarea>${fingerprint}</textarea>`;
-      document.querySelector('body').insertAdjacentHTML('beforeend',ta);
+      document.querySelector('#fingerprint-wrapper').insertAdjacentHTML('beforeend',ta);
     });
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+      domContentLoaded()
+    });
+
+    function domContentLoaded(){
+      const stElement = document.querySelector('#sign-token');
+      console.log(stElement);
+      stElement.addEventListener('click',requestSignToken);
+    }
+
+    function requestSignToken($event){
+      const options = {
+        method:'POST',
+        headers:{
+          fp:document.querySelector('textarea').value
+        },
+        body:{}
+      };
+      return fetch('http://localhost:8080/token',options)
+      .then((r)=>{
+        console.log(r);
+      })
+      .catch((e)=>{
+        console.log(e);
+      })
+    }
+
   </script>
 </head>
 <body>
+  <div id="fingerprint-wrapper">your preparing fingerprint is<br/></div>
+  <div>
+    <button id="sign-token">Request sign token with fingerprint(textarea value) to server</button>
+  </div>
 </body>
 </html>
