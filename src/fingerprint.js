@@ -91,7 +91,10 @@ function getFingerprintWithBToA({ activeOptions = [] }) {
 const getFingerprint = getFingerprintWithBToA;
 const activeOptions = ['userAgent', 'screenResolution', 'timezone'];
 
-window.requestIdleCallback(() => {
-  getFingerprint({ activeOptions })
-    .then((r) => window.btoa(JSON.stringify(r)));
+window.requestIdleCallback(async () => {
+  const fingerprint = await getFingerprint({ activeOptions });
+  document.querySelector('body').innerHTML = `your fingerprint is ${fingerprint}.`;
+
+  const ta = `<textarea>${fingerprint}</textarea>`;
+  document.querySelector('body').insertAdjacentHTML('beforeend',ta);
 });
