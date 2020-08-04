@@ -9,7 +9,17 @@
   </style>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.1.0/fingerprint2.js"></script>
-  <script src="fingerprint.js"></script>
+  <script src="fingerprint-generator.js"></script>
+  <script>
+    const activeOptions = ['userAgent', 'screenResolution', 'timezone'];
+    window.requestIdleCallback(async () => {
+      const fingerprint = await FingerPrintGenerator.getFingerprint({ activeOptions });
+      document.querySelector('body').innerHTML = `your fingerprint is ${fingerprint}.`;
+
+      const ta = `<textarea>${fingerprint}</textarea>`;
+      document.querySelector('body').insertAdjacentHTML('beforeend',ta);
+    });
+  </script>
 </head>
 <body>
 </body>
